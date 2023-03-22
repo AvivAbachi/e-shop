@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 	products: [
 		{
 			name: 'product a',
