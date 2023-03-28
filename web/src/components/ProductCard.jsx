@@ -2,7 +2,7 @@ import { Button, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Rating from './Rating';
 
-function ProductItem({ product: { token, name, image, price, rating, totalReviews } }) {
+function ProductCard({ product: { token, name, image, price, rating, totalReviews } }) {
 	return (
 		<Card className='product-card'>
 			<Link to={`/products/${token}`}>
@@ -19,4 +19,4 @@ function ProductItem({ product: { token, name, image, price, rating, totalReview
 		</Card>
 	);
 }
-export default ProductItem;
+export default ProductCard;
