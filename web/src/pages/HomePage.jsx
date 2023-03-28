@@ -1,57 +1,26 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
 import productsApi from '../api/productsApi';
 import Product from '../components/ProductItem';
-
-const types = {
-	GET_REQUEST: 'GET_REQUEST',
-	GET_SUCCESS: 'GET_SUCCESS',
-	GET_FAIL: 'GET_FAIL',
-};
-
-const reducer = (state, { type, payload }) => {
-	switch (type) {
-		case types.GET_REQUEST:
-			return { ...state, loading: true };
-		case types.GET_SUCCESS:
-			return { ...state, products: payload, loading: false };
-		case types.GET_FAIL:
-			return { ...state, error: payload, loading: false };
-		default:
-			return state;
-	}
-};
+import useFecth from '../hooks/useFecth';
 
 function HomePage() {
-	const [state, dispatch] = useReducer(reducer, {
-		loading: false,
-		error: '',
-		products: [],
-	});
+	const [{ loading, error, data }, getData] = useFecth();
 
 	useEffect(() => {
-		const getProducts = async () => {
-			dispatch({ type: types.GET_REQUEST });
-			try {
-				const res = await productsApi.getProducts();
-				dispatch({ type: types.GET_SUCCESS, payload: res.data });
-			} catch (error) {
-				dispatch({ type: types.GET_FAIL, payload: error.message });
-			}
-		};
-		getProducts();
+		getData(productsApi.getProducts);
 	}, []);
 
-	if (state.loading) return <div>loading...</div>;
+	if (loading) return <div>loading...</div>;
 
-	if (state.error) return <div>{state.error}</div>;
+	if (error) return <div>{error}</div>;
 
 	return (
 		<div>
 			<h1>Products</h1>
 			<Row>
-				{state.products.map((p) => (
+				{data?.map((p) => (
 					<Col key={p.token} lg={3} md={4} sm={6} className='mb-3'>
 						<Product product={p} />
 					</Col>

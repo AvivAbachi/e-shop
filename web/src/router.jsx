@@ -3,7 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import App from './App';
 import HomePage from './pages/HomePage';
-import ProductPage, { productLoader } from './pages/ProductPage';
+import ProductPage from './pages/ProductPage';
 
 const router = createBrowserRouter([
 	{
@@ -18,7 +18,6 @@ const router = createBrowserRouter([
 			{
 				path: 'products/:token',
 				element: <ProductPage />,
-				// loader: productLoader,
 			},
 		],
 	},

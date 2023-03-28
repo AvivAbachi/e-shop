@@ -1,65 +1,28 @@
-import { useEffect, useReducer } from 'react';
-import { useLoaderData } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 import productsApi from '../api/productsApi';
+import useFecth from '../hooks/useFecth';
 
 function ProductPage() {
-	const [state, dispatch] = useReducer(reducer, {
-		loading: false,
-		error: '',
-		products: {
-			name,
-			catagory,
-			price,
-			token,
-			brand,
-			description,
-			stock,
-			rating,
-			reviews,
-			image,
-		},
-	});
+	const params = useParams();
+
+	const [{ loading, error, data }, getData] = useFecth();
 
 	useEffect(() => {
-		const getProducts = async () => {
-			dispatch({ type: types.GET_REQUEST });
-			try {
-				const res = await productsApi.getProductByToken();
-				dispatch({ type: types.GET_SUCCESS, payload: res.data });
-			} catch (error) {
-				dispatch({ type: types.GET_FAIL, payload: error.message });
-			}
-		};
-		getProducts();
+		getData(async () => await productsApi.getProductByToken(params.token));
 	}, []);
 
-	const {
-		product: {
-			name,
-			catagory,
-			price,
-			token,
-			brand,
-			description,
-			stock,
-			rating,
-			reviews,
-			image,
-		},
-	} = useLoaderData();
+	if (loading) return <div>loading...</div>;
+
+	if (error) return <div>{error}</div>;
 
 	return (
 		<div>
-			<h1>{name}</h1>
-			<img src={image} />
+			<h1>{data?.name}</h1>
+			<img src={data?.image} />
 		</div>
 	);
 }
-
-// export async function productLoader({ params }) {
-// 	const res = await productsApi.getProductByToken(params.token);
-// 	return { product: res.data };
-// }
 
 export default ProductPage;
