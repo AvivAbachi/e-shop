@@ -4,9 +4,9 @@ axios.defaults.baseURL = 'http://localhost:5000';
 
 const getProducts = async () => await axios.get('api/v1/products/');
 
-const getProductById = async (id) => await axios.get(`api/v1/products/${id}`);
+const getProductByToken = async (token) => await axios.get(`api/v1/products/${token}`);
 
 export default {
 	getProducts,
-	getProductById,
+	getProductByToken,
 };

@@ -9,7 +9,7 @@ export default {
 			description: 'something....',
 			stock: 6,
 			rating: 2.5,
-			reviews: 100,
+			totalReviews: 100,
 			image: '/images/p1.jfif',
 		},
 		{
@@ -21,7 +21,7 @@ export default {
 			description: 'something....',
 			stock: 12,
 			rating: 3.5,
-			reviews: 57,
+			totalReviews: 57,
 			image: '/images/p2.jfif',
 		},
 		{
@@ -33,7 +33,7 @@ export default {
 			description: 'something....',
 			stock: 15,
 			rating: 2.5,
-			reviews: 35,
+			totalReviews: 35,
 			image: '/images/p3.jfif',
 		},
 		{
@@ -45,7 +45,7 @@ export default {
 			description: 'something....',
 			stock: 7,
 			rating: 4.0,
-			reviews: 20,
+			totalReviews: 20,
 			image: '/images/p4.jfif',
 		},
 	],

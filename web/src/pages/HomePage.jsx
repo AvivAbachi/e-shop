@@ -1,8 +1,8 @@
-import { useReducer } from 'react';
-import { useEffect } from 'react';
+import { useEffect, useReducer } from 'react';
+import { Col, Row } from 'react-bootstrap';
 
 import productsApi from '../api/productsApi';
-import Product from '../components/Product';
+import Product from '../components/ProductItem';
 
 const types = {
 	GET_REQUEST: 'GET_REQUEST',
@@ -48,14 +48,16 @@ function HomePage() {
 	if (state.error) return <div>{state.error}</div>;
 
 	return (
-		<main>
+		<div>
 			<h1>Products</h1>
-			<div className='list'>
+			<Row>
 				{state.products.map((p) => (
-					<Product key={p.id} {...p} />
+					<Col key={p.token} lg={3} md={4} sm={6} className='mb-3'>
+						<Product product={p} />
+					</Col>
 				))}
-			</div>
-		</main>
+			</Row>
+		</div>
 	);
 }
 

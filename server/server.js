@@ -17,8 +17,8 @@ app.use('/api/v1/seed', seedRouter);
 
 app.get('/api/v1/products', (req, res) => res.send(data.products));
 
-app.get('/api/v1/products/:id', (req, res) => {
-	const product = data.products.find((p) => p.id === req.params.id);
+app.get('/api/v1/products/:token', (req, res) => {
+	const product = data.products.find((p) => p.token === req.params.token);
 	if (product) return res.send(product);
 	return res.status(404).send('Product not found');
 });
@@ -32,5 +32,5 @@ mongoose
 		});
 	})
 	.catch((err) => {
-		console.error(`Fail to Connect Database!\n ${err.message}`);
+		console.error(`Fail to Connect Database!\n${err.message}`);
 	});
