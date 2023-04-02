@@ -3,14 +3,14 @@ import mongoose from 'mongoose';
 const productSchema = mongoose.Schema(
 	{
 		name: { type: String, required: true, unique: true },
-		catagory: { type: String, required: true },
+		category: { type: String, required: true },
 		price: { type: Number, required: true },
 		token: { type: String, required: true, unique: true },
-		brand: { type: String },
-		description: { type: String },
+		brand: { type: String, required: true },
+		description: { type: String, required: true },
 		stock: { type: Number, required: true },
 		rating: { type: Number, required: true },
-		reviews: { type: Number, required: true },
+		totalReviews: { type: Number, required: true },
 		image: { type: String, required: true },
 	},
 	{ timestamps: true }

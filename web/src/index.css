@@ -7,11 +7,16 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	-webkit-text-size-adjust: 100%;
 }
+main {
+	flex: 1;
+}
 .side-allpage {
 	min-height: 100vh;
 }
-main {
-	flex: 1;
+.products {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
 }
 .rating {
 	color: #ffc000;
@@ -37,4 +42,16 @@ main {
 .product-card:hover {
 	box-shadow: 10px 10px 10px #888888;
 	transform: scale(1.02);
+}
+.card-img-top {
+	object-fit: contain;
+	object-position: center;
+	width: 100%;
+	height: 500px;
+}
+.img-thumbnail {
+	height: 200px;
+}
+.small-container {
+	max-width: 600px;
 }

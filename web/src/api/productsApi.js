@@ -2,11 +2,20 @@ import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:5000';
 
-const getProducts = async () => await axios.get('api/v1/products/');
+async function getProducts() {
+	return await axios.get('api/v1/products/');
+}
 
-const getProductByToken = async (token) => await axios.get(`api/v1/products/${token}`);
+async function getProductByToken(token) {
+	return await axios.get(`api/v1/products/token/${token}`);
+}
+
+async function getProductById(id) {
+	return await axios.get(`api/v1/products/${id}`);
+}
 
 export default {
 	getProducts,
 	getProductByToken,
+	getProductById,
 };
