@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { Badge, Button, Card, Col, ListGroup, Row } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -13,14 +13,8 @@ import { Store } from '../Store';
 function ProductPage() {
 	const navigate = useNavigate();
 	const params = useParams();
-
-	const {
-		data: product,
-		error,
-		loading,
-	} = useFecth(productsApi.getProductByToken, params?.token);
-
 	const { state, dispatch } = useContext(Store);
+	const { data: product, error, loading } = useFecth(productsApi.getProductByToken, params?.token);
 
 	const addToCartHandler = async () => {
 		const existedItem = state.cart.cartItems.find((x) => x._id === product._id);
@@ -33,7 +27,6 @@ function ProductPage() {
 		}
 
 		dispatch({ type: 'ADD_TO_CART', payload: { ...product, quantity } });
-
 		navigate('/cart');
 	};
 
@@ -66,7 +59,6 @@ function ProductPage() {
 								</ListGroup.Item>
 							</ListGroup>
 						</Col>
-
 						<Col md={3}>
 							<Card>
 								<Card.Body>
@@ -89,7 +81,6 @@ function ProductPage() {
 												</Col>
 											</Row>
 										</ListGroup.Item>
-
 										{product.stock > 0 && (
 											<ListGroup.Item>
 												<div className='d-grid'>

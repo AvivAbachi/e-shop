@@ -2,12 +2,12 @@ import { useContext, useEffect, useState } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+// import { toast } from 'react-toastify';
 
 import usersApi from '../api/usersApi';
 import { Store, storeTypes } from '../Store';
 import { getError } from '../utils';
 
-// import { toast } from 'react-toastify';
 function SigninPage() {
 	const navigate = useNavigate();
 	const { search } = useLocation();
@@ -48,26 +48,17 @@ function SigninPage() {
 			<Form onSubmit={submitHandler}>
 				<Form.Group className='mb-3' controlId='email'>
 					<Form.Label>Email</Form.Label>
-					<Form.Control
-						type='email'
-						required
-						onChange={(e) => setEmail(e.target.value)}
-					/>
+					<Form.Control type='email' required onChange={(e) => setEmail(e.target.value)} />
 				</Form.Group>
 				<Form.Group className='mb-3' controlId='password'>
 					<Form.Label>Password</Form.Label>
-					<Form.Control
-						type='password'
-						required
-						onChange={(e) => setPassword(e.target.value)}
-					/>
+					<Form.Control type='password' required onChange={(e) => setPassword(e.target.value)} />
 				</Form.Group>
 				<div className='mb-3'>
 					<Button type='submit'>Sign In</Button>
 				</div>
 				<div className='mb-3'>
-					New customer?{' '}
-					<Link to={`/signup?redirect=${redirect}`}>Create your account</Link>
+					New customer? <Link to={`/signup?redirect=${redirect}`}>Create your account</Link>
 				</div>
 				<div className='mb-3'>
 					Forget Password? <Link to={`/forget-password`}>Reset Password</Link>

@@ -1,4 +1,3 @@
-import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
 import App from './App';
@@ -12,23 +11,10 @@ const router = createBrowserRouter([
 		path: '/',
 		element: <App />,
 		children: [
-			{
-				index: true,
-				path: '/',
-				element: <HomePage />,
-			},
-			{
-				path: 'products/:token',
-				element: <ProductPage />,
-			},
-			{
-				path: '/cart',
-				element: <CartPage />,
-			},
-			{
-				path: '/signin',
-				element: <SigninPage />,
-			},
+			{ index: true, path: '/', element: <HomePage /> },
+			{ path: 'products/:token', element: <ProductPage /> },
+			{ path: '/cart', element: <CartPage /> },
+			{ path: '/signin', element: <SigninPage /> },
 		],
 	},
 ]);
