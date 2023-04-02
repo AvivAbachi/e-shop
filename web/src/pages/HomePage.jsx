@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
 import productsApi from '../api/productsApi';
@@ -6,11 +5,7 @@ import ProductCard from '../components/ProductCard';
 import useFecth from '../hooks/useFecth';
 
 function HomePage() {
-	const [{ loading, error, data }, getData] = useFecth();
-
-	useEffect(() => {
-		getData(productsApi.getProducts);
-	}, []);
+	const { data, error, loading } = useFecth(productsApi.getProducts);
 
 	return (
 		<div>

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 
@@ -7,11 +7,7 @@ import useFecth from '../hooks/useFecth';
 
 function ProductPage() {
 	const params = useParams();
-	const [{ loading, error, data }, getData] = useFecth();
-
-	useEffect(() => {
-		getData(async () => await productsApi.getProductByToken(params.token));
-	}, [params.token]);
+	const { data, error, loading } = useFecth(productsApi.getProductByToken, params?.token);
 
 	return (
 		<div>
