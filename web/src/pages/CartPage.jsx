@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import productsApi from '../api/productsApi';
 import MessageBox from '../components/MessageBox';
-import { Store } from '../Store';
+import { Store, storeTypes } from '../Store';
 
 function CartPage() {
 	const navigate = useNavigate();
@@ -20,14 +20,14 @@ function CartPage() {
 			return;
 		}
 		dispatch({
-			type: 'ADD_TO_CART',
+			type: storeTypes.ADD_TO_CART,
 			payload: { ...item, quantity },
 		});
 	}
 
 	function removeItemHandler(item) {
 		dispatch({
-			type: 'REMOVE_FROM_CART',
+			type: storeTypes.REMOVE_FROM_CART,
 			payload: item,
 		});
 	}

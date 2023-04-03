@@ -8,7 +8,7 @@ import Loading from '../components/Loading';
 import MessageBox from '../components/MessageBox';
 import Rating from '../components/Rating';
 import useFecth from '../hooks/useFecth';
-import { Store } from '../Store';
+import { Store, storeTypes } from '../Store';
 
 function ProductPage() {
 	const navigate = useNavigate();
@@ -26,7 +26,7 @@ function ProductPage() {
 			return;
 		}
 
-		dispatch({ type: 'ADD_TO_CART', payload: { ...product, quantity } });
+		dispatch({ type: storeTypes.ADD_TO_CART, payload: { ...product, quantity } });
 		navigate('/cart');
 	};
 
@@ -72,13 +72,7 @@ function ProductPage() {
 										<ListGroup.Item>
 											<Row>
 												<Col>Status:</Col>
-												<Col>
-													{product.stock > 0 ? (
-														<Badge bg='success'>In Stock</Badge>
-													) : (
-														<Badge bg='danger'>Not in Stock</Badge>
-													)}
-												</Col>
+												<Col>{product.stock > 0 ? <Badge bg='success'>In Stock</Badge> : <Badge bg='danger'>Not in Stock</Badge>}</Col>
 											</Row>
 										</ListGroup.Item>
 										{product.stock > 0 && (
