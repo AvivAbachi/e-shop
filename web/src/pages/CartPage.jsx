@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import productsApi from '../api/productsApi';
 import MessageBox from '../components/MessageBox';
-import { Store, storeTypes } from '../Store';
+import { Store, storeActions } from '../Store';
 
 function CartPage() {
 	const navigate = useNavigate();
@@ -20,14 +20,14 @@ function CartPage() {
 			return;
 		}
 		dispatch({
-			type: storeTypes.ADD_TO_CART,
+			type: storeActions.ADD_TO_CART,
 			payload: { ...item, quantity },
 		});
 	}
 
 	function removeItemHandler(item) {
 		dispatch({
-			type: storeTypes.REMOVE_FROM_CART,
+			type: storeActions.REMOVE_FROM_CART,
 			payload: item,
 		});
 	}
@@ -53,14 +53,19 @@ function CartPage() {
 								<ListGroup.Item key={item._id}>
 									<Row className='align-items-center'>
 										<Col md={4}>
-											<img className='img-fluid rounded img-thumbnail' src={item.image} alt={item.name} /> <Link to={`/products/${item.token}`}>{item.name}</Link>
+											<img className='img-fluid rounded img-thumbnail' src={item.image} alt={item.name} />{' '}
+											<Link to={`/products/${item.token}`}>{item.name}</Link>
 										</Col>
 										<Col md={3}>
 											<Button onClick={() => updateCartHandler(item, item.quantity - 1)} variant='light' disabled={item.quantity === 1}>
 												<i className='fas fa-minus-circle' />
 											</Button>{' '}
 											<span>{item.quantity}</span>{' '}
-											<Button variant='light' disabled={item.quantity === item.stock} onClick={() => updateCartHandler(item, item.quantity + 1)}>
+											<Button
+												variant='light'
+												disabled={item.quantity === item.stock}
+												onClick={() => updateCartHandler(item, item.quantity + 1)}
+											>
 												<i className='fas fa-plus-circle' />
 											</Button>
 										</Col>
@@ -82,7 +87,8 @@ function CartPage() {
 							<ListGroup variant='flush'>
 								<ListGroup.Item>
 									<h3>
-										Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)} Items) : ${cartItems.reduce((a, c) => a + c.price * c.quantity, 0)}
+										Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)} Items) : $
+										{cartItems.reduce((a, c) => a + c.price * c.quantity, 0)}
 									</h3>
 								</ListGroup.Item>
 								<ListGroup.Item>

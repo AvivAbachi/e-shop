@@ -3,7 +3,7 @@ import { Button, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import productsApi from '../api/productsApi';
-import { Store, storeTypes } from '../Store';
+import { Store, storeActions } from '../Store';
 import Rating from './Rating';
 
 function ProductCard({ product }) {
@@ -20,7 +20,7 @@ function ProductCard({ product }) {
 		}
 
 		dispatch({
-			type: storeTypes.ADD_TO_CART,
+			type: storeActions.ADD_TO_CART,
 			payload: { ...product, quantity },
 		});
 	};

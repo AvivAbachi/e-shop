@@ -8,7 +8,7 @@ import Loading from '../components/Loading';
 import MessageBox from '../components/MessageBox';
 import Rating from '../components/Rating';
 import useFecth from '../hooks/useFecth';
-import { Store, storeTypes } from '../Store';
+import { Store, storeActions } from '../Store';
 
 function ProductPage() {
 	const navigate = useNavigate();
@@ -26,7 +26,7 @@ function ProductPage() {
 			return;
 		}
 
-		dispatch({ type: storeTypes.ADD_TO_CART, payload: { ...product, quantity } });
+		dispatch({ type: storeActions.ADD_TO_CART, payload: { ...product, quantity } });
 		navigate('/cart');
 	};
 
