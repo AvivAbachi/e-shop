@@ -2,9 +2,10 @@ import { createContext, useReducer } from 'react';
 
 export const Store = createContext();
 
-export const storeActions = {
+export const actions = {
 	ADD_TO_CART: 'ADD_TO_CART',
 	REMOVE_FROM_CART: 'REMOVE_FROM_CART',
+	CLEAR_CART: 'CLEAR_CART',
 	USER_SIGNIN: 'USER_SIGNIN',
 	USER_SIGNOUT: 'USER_SIGNOUT',
 	SAVE_SHIPPING_ADDRESS: 'SAVE_SHIPPING_ADDRESS',
@@ -12,18 +13,17 @@ export const storeActions = {
 };
 
 const initialState = {
-	fullBox: null,
 	cart: {
 		shippingAddress: localStorage.getItem('shippingAddress') ? JSON.parse(localStorage.getItem('shippingAddress')) : {},
 		cartItems: localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : [],
-		paymentMethod: localStorage.getItem('paymentMethod') ? JSON.parse(localStorage.getItem('paymentMethod')) : '',
+		paymentMethod: localStorage.getItem('paymentMethod') ? localStorage.getItem('paymentMethod') : '',
 	},
 	userInfo: localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null,
 };
 
-const reducer = (state = initialState, { type, payload }) => {
+const reducer = (state, { type, payload }) => {
 	switch (type) {
-		case storeActions.ADD_TO_CART: {
+		case actions.ADD_TO_CART: {
 			const existingItem = state.cart.cartItems.find((item) => item._id === payload._id);
 			const cartItems = existingItem
 				? state.cart.cartItems.map((item) => (item._id === existingItem._id ? payload : item))
@@ -31,29 +31,38 @@ const reducer = (state = initialState, { type, payload }) => {
 			localStorage.setItem('cartItems', JSON.stringify(cartItems));
 			return { ...state, cart: { ...state.cart, cartItems } };
 		}
-		case storeActions.REMOVE_FROM_CART: {
+
+		case actions.REMOVE_FROM_CART: {
 			const cartItems = state.cart.cartItems.filter((item) => item._id !== payload._id);
 			localStorage.setItem('cartItems', JSON.stringify(cartItems));
 			return { ...state, cart: { ...state.cart, cartItems } };
 		}
-		case storeActions.USER_SIGNIN: {
+		case actions.CLEAR_CART: {
+			localStorage.removeItem('cartItems');
+			return { ...state, cart: { ...state.cart, cartItems: [] } };
+		}
+		case actions.USER_SIGNIN: {
 			localStorage.setItem('userInfo', JSON.stringify(payload));
 			return { ...state, userInfo: payload };
 		}
-		case storeActions.USER_SIGNOUT: {
+
+		case actions.USER_SIGNOUT: {
 			localStorage.removeItem('userInfo');
 			localStorage.removeItem('shippingAddress');
 			localStorage.removeItem('paymentMethod');
 			return { ...state, userInfo: null, cart: { cartItems: [], shippingAddress: {} } };
 		}
-		case storeActions.SAVE_SHIPPING_ADDRESS: {
+
+		case actions.SAVE_SHIPPING_ADDRESS: {
 			localStorage.setItem('shippingAddress', JSON.stringify(payload));
 			return { ...state, cart: { ...state.cart, shippingAddress: payload } };
 		}
-		case storeActions.SAVE_PAYMENT_METHOD: {
+
+		case actions.SAVE_PAYMENT_METHOD: {
 			localStorage.setItem('paymentMethod', payload);
 			return { ...state, cart: { ...state.cart, paymentMethod: payload } };
 		}
+
 		default: {
 			return state;
 		}

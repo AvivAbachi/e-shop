@@ -2,10 +2,11 @@ import { useContext } from 'react';
 import { Button, Card, Col, ListGroup, Row } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import productsApi from '../api/productsApi';
 import MessageBox from '../components/MessageBox';
-import { Store, storeActions } from '../Store';
+import { actions, Store } from '../Store';
 
 function CartPage() {
 	const navigate = useNavigate();
@@ -16,20 +17,14 @@ function CartPage() {
 		const { data } = await productsApi.getProductById(item._id);
 
 		if (data.stock < quantity) {
-			window.alert('Sorry. Product is out of stock');
+			toast.error('Sorry. Product is out of stock');
 			return;
 		}
-		dispatch({
-			type: storeActions.ADD_TO_CART,
-			payload: { ...item, quantity },
-		});
+		dispatch({ type: actions.ADD_TO_CART, payload: { ...item, quantity } });
 	}
 
 	function removeItemHandler(item) {
-		dispatch({
-			type: storeActions.REMOVE_FROM_CART,
-			payload: item,
-		});
+		dispatch({ type: actions.REMOVE_FROM_CART, payload: item });
 	}
 
 	function checkoutHandler() {
@@ -49,29 +44,33 @@ function CartPage() {
 						</MessageBox>
 					) : (
 						<ListGroup>
-							{cartItems.map((item) => (
-								<ListGroup.Item key={item._id}>
+							{cartItems.map((product) => (
+								<ListGroup.Item key={product._id}>
 									<Row className='align-items-center'>
 										<Col md={4}>
-											<img className='img-fluid rounded img-thumbnail' src={item.image} alt={item.name} />{' '}
-											<Link to={`/products/${item.token}`}>{item.name}</Link>
+											<img className='img-fluid rounded img-thumbnail' src={product.image} alt={product.title} />{' '}
+											<Link to={`/products/${product.token}`}>{product.title}</Link>
 										</Col>
 										<Col md={3}>
-											<Button onClick={() => updateCartHandler(item, item.quantity - 1)} variant='light' disabled={item.quantity === 1}>
+											<Button
+												onClick={() => updateCartHandler(product, product.quantity - 1)}
+												variant='light'
+												disabled={product.quantity === 1}
+											>
 												<i className='fas fa-minus-circle' />
 											</Button>{' '}
-											<span>{item.quantity}</span>{' '}
+											<span>{product.quantity}</span>{' '}
 											<Button
 												variant='light'
-												disabled={item.quantity === item.stock}
-												onClick={() => updateCartHandler(item, item.quantity + 1)}
+												disabled={product.quantity === product.stock}
+												onClick={() => updateCartHandler(product, product.quantity + 1)}
 											>
 												<i className='fas fa-plus-circle' />
 											</Button>
 										</Col>
-										<Col md={3}>{item.price}</Col>
+										<Col md={3}>{product.price} $</Col>
 										<Col md={2}>
-											<Button variant='light' onClick={() => removeItemHandler(item)}>
+											<Button variant='light' onClick={() => removeItemHandler(product)}>
 												<i className='fas fa-trash' />
 											</Button>
 										</Col>

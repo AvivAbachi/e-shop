@@ -1,9 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
-import CheckoutSteps from '../components/CheckoutSteps';
+import { useContext, useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { Store, storeActions } from '../Store';
+import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
+
+import CheckoutSteps from '../components/CheckoutSteps';
+import { Store, actions } from '../Store';
 
 function PaymantPage() {
 	const navigate = useNavigate();
@@ -16,23 +17,21 @@ function PaymantPage() {
 	const [method, setMethod] = useState(paymentMethod);
 	const submitHandler = (e) => {
 		e.preventDefault();
-		dispatch({ type: storeActions.SAVE_SHIPPING_ADDRESS, paload: method });
+		dispatch({ type: actions.SAVE_PAYMENT_METHOD, payload: method });
+		navigate('/placeorder');
 	};
 
 	useEffect(() => {
-		if (!shippingAddress.address) navigate('/shipping');
-	}, [shippingAddress?.address, navigate]);
-
-	useEffect(() => {
 		if (!userInfo) navigate('/signin?redirect=/payment');
-	}, [userInfo, navigate]);
+		if (!shippingAddress.address) navigate('/shipping');
+	}, [userInfo, shippingAddress.address, navigate]);
 
 	return (
 		<div>
 			<Helmet>
 				<title>Shipping Address</title>
 			</Helmet>
-			<CheckoutSteps step1 step2 />
+			<CheckoutSteps step1 step2 step3 />
 			<div className='container small-container'>
 				<h1 className='my-3'>Shipping Address</h1>
 				<Form onSubmit={submitHandler}>

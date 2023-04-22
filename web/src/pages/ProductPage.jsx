@@ -1,20 +1,21 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Badge, Button, Card, Col, ListGroup, Row } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import productsApi from '../api/productsApi';
 import Loading from '../components/Loading';
 import MessageBox from '../components/MessageBox';
 import Rating from '../components/Rating';
-import useFecth from '../hooks/useFecth';
-import { Store, storeActions } from '../Store';
+import useRequest from '../hooks/useRequest';
+import { actions, Store } from '../Store';
 
 function ProductPage() {
 	const navigate = useNavigate();
 	const params = useParams();
 	const { state, dispatch } = useContext(Store);
-	const { data: product, error, loading } = useFecth(productsApi.getProductByToken, params?.token);
+	const { onFail, onSuccess, onRequest, data: product, error, loading } = useRequest();
 
 	const addToCartHandler = async () => {
 		const existedItem = state.cart.cartItems.find((x) => x._id === product._id);
@@ -22,13 +23,26 @@ function ProductPage() {
 		const { data } = await productsApi.getProductById(product._id);
 
 		if (data.stock < quantity) {
-			window.alert('Product is out of stock');
+			toast.error('Product is out of stock');
 			return;
 		}
 
-		dispatch({ type: storeActions.ADD_TO_CART, payload: { ...product, quantity } });
+		dispatch({ type: actions.ADD_TO_CART, payload: { ...product, quantity } });
 		navigate('/cart');
 	};
+
+	useEffect(() => {
+		const getData = async () => {
+			onRequest();
+			try {
+				const { data } = await productsApi.getProductByToken(params?.token);
+				onSuccess(data);
+			} catch (error) {
+				onFail(error.message);
+			}
+		};
+		getData();
+	}, []);
 
 	return (
 		<div>
@@ -40,15 +54,15 @@ function ProductPage() {
 				<div>
 					<Row>
 						<Col md={6}>
-							<img className='img-large' src={`../${product.image}`} alt={product.name} />
+							<img className='img-large' src={`../${product.image}`} alt={product.title} />
 						</Col>
 						<Col md={3}>
 							<ListGroup>
 								<ListGroup.Item>
 									<Helmet>
-										<title>{product.name}</title>
+										<title>{product.title}</title>
 									</Helmet>
-									<h1>{product.name}</h1>
+									<h1>{product.title}</h1>
 								</ListGroup.Item>
 								<ListGroup.Item>
 									<Rating rating={product.rating} totalReviews={product.totalReviews} />

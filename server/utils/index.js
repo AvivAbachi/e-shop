@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 export function generateToken(user) {
-	return jwt.sign({ _id: user._id, name: user.name, email: user.email }, process.env.JWT_PW, { expiresIn: '15d' });
+	return jwt.sign({ _id: user._id, name: user.name, email: user.email }, process.env.JWT_SECRET, { expiresIn: '15d' });
 }
 
 export const isAdmin = (req, res, next) => {
@@ -18,6 +18,7 @@ export const isAuth = (req, res, next) => {
 		const token = authorization.slice(7, authorization.length); // Bearer XXXXXX
 		jwt.verify(token, process.env.JWT_SECRET, (err, decode) => {
 			if (err) {
+				console.log(authorization, err);
 				res.status(401).send({ message: 'Invalid Token' });
 			} else {
 				req.user = decode;

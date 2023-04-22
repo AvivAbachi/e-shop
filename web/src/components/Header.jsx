@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import { Badge, Container, Navbar, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-import { Store, storeActions } from '../Store';
+import { actions, Store } from '../Store';
 
 export function Header() {
 	const {
@@ -13,16 +13,23 @@ export function Header() {
 		},
 		dispatch,
 	} = useContext(Store);
+	const navigate = useNavigate();
 
 	const signgoutHandelr = () => {
-		dispatch({ type: storeActions.USER_SIGNOUT });
+		dispatch({ type: actions.USER_SIGNOUT });
 	};
 
 	return (
 		<header>
 			<Navbar bg='dark' variant='dark'>
 				<Container>
-					<LinkContainer to='/'>
+					{location.pathname !== '/' && (
+						<Link onClick={() => navigate(-1)} className='me-4 fw-bold link-light text-decoration-none'>
+							<i className='fa fa-arrow-left me-2' />
+							Back
+						</Link>
+					)}
+					<LinkContainer to='/' className='fw-bold'>
 						<Navbar.Brand>E Shop</Navbar.Brand>
 					</LinkContainer>
 					<nav className='ms-auto d-flex justify-content-end text-white'>

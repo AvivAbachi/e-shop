@@ -1,18 +1,17 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import usersApi from '../api/usersApi';
-import { Store, storeActions } from '../Store';
+import { actions, Store } from '../Store';
 import { getError } from '../utils';
 
 function SigninPage() {
 	const navigate = useNavigate();
 	const { search } = useLocation();
-	const redirectInUrl = new URLSearchParams(search).get('redirect');
-	const redirect = redirectInUrl ? redirectInUrl : '/';
+	const redirect = useMemo(() => new URLSearchParams(search).get('redirect') ?? '/', [search]);
 
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -25,9 +24,9 @@ function SigninPage() {
 	const submitHandler = async (e) => {
 		e.preventDefault();
 		try {
-			const { data } = await usersApi.sign({ email, password });
-			dispatch({ type: storeActions.USER_SIGNIN, payload: data });
-			navigate(redirect || '/');
+			const { data } = await usersApi.signin(email, password);
+			dispatch({ type: actions.USER_SIGNIN, payload: data });
+			navigate(redirect);
 		} catch (err) {
 			toast.error(getError(err));
 		}

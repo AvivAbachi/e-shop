@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 
 import CheckoutSteps from '../components/CheckoutSteps';
-import { Store, storeActions } from '../Store';
+import { Store, actions } from '../Store';
 
 export default function ShippingAddressPage() {
 	const navigate = useNavigate();
@@ -14,7 +14,7 @@ export default function ShippingAddressPage() {
 		cart: { shippingAddress },
 	} = state;
 
-	const [name, setName] = useState(shippingAddress.name || '');
+	const [fullName, setFullName] = useState(shippingAddress.fullName || '');
 	const [address, setAddress] = useState(shippingAddress.address || '');
 	const [city, setCity] = useState(shippingAddress.city || '');
 	const [postalCode, setPostalCode] = useState(shippingAddress.postalCode || '');
@@ -23,15 +23,8 @@ export default function ShippingAddressPage() {
 	const submitHandler = (e) => {
 		e.preventDefault();
 		dispatch({
-			type: storeActions.SAVE_SHIPPING_ADDRESS,
-			payload: {
-				name,
-				address,
-				city,
-				postalCode,
-				country,
-				location: shippingAddress.location,
-			},
+			type: actions.SAVE_SHIPPING_ADDRESS,
+			payload: { fullName, address, city, postalCode, country },
 		});
 		navigate('/payment');
 	};
@@ -42,10 +35,6 @@ export default function ShippingAddressPage() {
 		}
 	}, [userInfo, navigate]);
 
-	// useEffect(() => {
-	// 	dispatch({ type: 'SET_FULLBOX_OFF' });
-	// }, [dispatch, fullBox]);
-
 	return (
 		<div>
 			<Helmet>
@@ -55,9 +44,9 @@ export default function ShippingAddressPage() {
 			<div className='container small-container'>
 				<h1 className='my-3'>Shipping Address</h1>
 				<Form onSubmit={submitHandler}>
-					<Form.Group className='mb-3' controlId='name'>
+					<Form.Group className='mb-3' controlId='fullName'>
 						<Form.Label>Full Name</Form.Label>
-						<Form.Control value={name} onChange={(e) => setName(e.target.value)} required />
+						<Form.Control value={fullName} onChange={(e) => setFullName(e.target.value)} required />
 					</Form.Group>
 					<Form.Group className='mb-3' controlId='address'>
 						<Form.Label>Address</Form.Label>
@@ -75,19 +64,6 @@ export default function ShippingAddressPage() {
 						<Form.Label>Country</Form.Label>
 						<Form.Control value={country} onChange={(e) => setCountry(e.target.value)} required />
 					</Form.Group>
-					<div className='mb-3'>
-						<Button id='chooseOnMap' type='button' variant='light' onClick={() => navigate('/map')}>
-							Choose Location On Map
-						</Button>
-						{shippingAddress.location && shippingAddress.location.lat ? (
-							<div>
-								LAT: {shippingAddress.location.lat}
-								LNG:{shippingAddress.location.lng}
-							</div>
-						) : (
-							<div>No location</div>
-						)}
-					</div>
 					<div className='mb-3'>
 						<Button variant='primary' type='submit'>
 							Continue
