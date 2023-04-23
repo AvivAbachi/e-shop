@@ -13,7 +13,7 @@ import { actions, Store } from '../Store';
 
 function ProductPage() {
 	const navigate = useNavigate();
-	const params = useParams();
+	const { token } = useParams();
 	const { state, dispatch } = useContext(Store);
 	const { onFail, onSuccess, onRequest, data: product, error, loading } = useRequest();
 
@@ -35,7 +35,7 @@ function ProductPage() {
 		const getData = async () => {
 			onRequest();
 			try {
-				const { data } = await productsApi.getProductByToken(params?.token);
+				const { data } = await productsApi.getProductByToken(token);
 				onSuccess(data);
 			} catch (error) {
 				onFail(error.message);

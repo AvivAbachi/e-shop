@@ -8,6 +8,7 @@ import CartItem from '../components/CartItem';
 import Loading from '../components/Loading';
 import MessageBox from '../components/MessageBox';
 import SummaryItem from '../components/SummaryItem';
+import TextHighlight from '../components/TextHighlight';
 import useRequest from '../hooks/useRequest';
 import { Store } from '../Store';
 import { getError } from '../utils';
@@ -17,11 +18,11 @@ function OrderPage() {
 		state: { userInfo },
 	} = useContext(Store);
 	const { orderId } = useParams();
-	const naviagte = useNavigate();
+	const navigate = useNavigate();
 	const { onFail, onRequest, onSuccess, data: order, error, loading } = useRequest();
 
 	useEffect(() => {
-		if (!userInfo) naviagte('/login');
+		if (!userInfo) navigate('/signin?redirect=/order/' + orderId);
 
 		const getOrder = async () => {
 			onRequest();
@@ -30,12 +31,11 @@ function OrderPage() {
 				onSuccess(data);
 			} catch (err) {
 				onFail(getError(err));
-				// toast.error(getError(err));
 			}
 		};
 
 		if (!order) getOrder();
-	}, [naviagte, order, orderId, userInfo]);
+	}, [navigate, order, orderId, userInfo]);
 
 	return (
 		<div>
@@ -55,8 +55,11 @@ function OrderPage() {
 								<Card.Body>
 									<Card.Title>Shipping</Card.Title>
 									<Card.Text>
-										<strong>Name: </strong> {order.shippingAddress.fullName} <br />
-										<strong>Address: </strong> {order.shippingAddress.address},{order.shippingAddress.city} ,{order.shippingAddress.country}
+										<TextHighlight title='Name: ' text={order.shippingAddress.fullName} />
+										<TextHighlight
+											title='Address: '
+											text={`${order.shippingAddress.address},${order.shippingAddress.city} ,${order.shippingAddress.country}`}
+										/>
 									</Card.Text>
 									{order.isDelivered ? (
 										<MessageBox variant='success'>Delivered at {order.deliveredAt}</MessageBox>
@@ -69,7 +72,7 @@ function OrderPage() {
 								<Card.Body>
 									<Card.Title>Payment</Card.Title>
 									<Card.Text>
-										<strong>Method: </strong> {order.paymentMethod}
+										<TextHighlight title='Method: ' text={order.paymentMethod} />
 									</Card.Text>
 									{order.isPaid ? (
 										<MessageBox variant='success'>Paid at {order.paidAt}</MessageBox>

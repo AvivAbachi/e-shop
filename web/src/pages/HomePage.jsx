@@ -29,22 +29,20 @@ function HomePage() {
 			<Helmet>
 				<title>E Shop</title>
 			</Helmet>
-			<div className='products'>
-				<h1>Products</h1>
-				{loading ? (
-					<Loading />
-				) : error ? (
-					<MessageBox variant='danger'>{error}</MessageBox>
-				) : (
-					<Row>
-						{products?.map((p) => (
-							<Col key={p.token} lg={3} md={4} sm={6} className='mb-3'>
-								<ProductCard product={p} />
-							</Col>
-						))}
-					</Row>
-				)}
-			</div>
+			<h1>Products</h1>
+			{loading ? (
+				<Loading />
+			) : error ? (
+				<MessageBox variant='danger'>{error}</MessageBox>
+			) : (
+				<Row>
+					{products?.map((p) => (
+						<Col key={p.token} lg={3} md={4} sm={6} className='mb-3'>
+							<ProductCard product={p} />
+						</Col>
+					))}
+				</Row>
+			)}
 		</div>
 	);
 }

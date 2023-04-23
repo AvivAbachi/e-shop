@@ -7,16 +7,18 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	-webkit-text-size-adjust: 100%;
 }
+.spinner-border {
+	display: block;
+	margin: 8rem auto 0;
+	--bs-spinner-width: 4rem;
+	--bs-spinner-height: 4rem;
+	--bs-spinner-border-width: 0.75rem;
+}
 main {
 	flex: 1;
 }
 .side-allpage {
 	min-height: 100vh;
-}
-.products {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
 }
 .rating {
 	color: #ffc000;
