@@ -12,7 +12,7 @@ const actions = {
 	GET_FAIL: 'GET_FAIL',
 };
 
-const reducer = (state, { type, payload }) => {
+const reducer = (state = initState, { type, payload }) => {
 	switch (type) {
 		case actions.GET_REQUEST:
 			return { ...state, loading: true };

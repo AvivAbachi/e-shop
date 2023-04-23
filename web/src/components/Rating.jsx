@@ -4,6 +4,7 @@ function Rating({
 	rating = 0,
 	totalReviews = 0,
 	numStars = 5,
+	caption = '',
 	fullStarIcon = 'fas fa-star',
 	halfStarIcon = 'fas fa-star-half-alt',
 	emptyStarIcon = 'far fa-star',
@@ -33,10 +34,13 @@ function Rating({
 		return starsArray;
 	}, [rating, numStars, getRatingIcon]);
 
-	const reviewText = useMemo(() => `${totalReviews} ${totalReviews === 1 ? 'Review' : 'Reviews'}`, [totalReviews]);
+	const reviewText = useMemo(
+		() => (caption ? caption : `${totalReviews} ${totalReviews === 1 ? 'Review' : 'Reviews'}`),
+		[caption, totalReviews]
+	);
 
 	return (
-		<div className='rating' aria-label={`Rating: ${rating} out of ${numStars}`}>
+		<div className='rating'>
 			{stars}
 			<span> {reviewText}</span>
 		</div>

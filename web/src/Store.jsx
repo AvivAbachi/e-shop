@@ -21,7 +21,7 @@ const initialState = {
 	userInfo: localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null,
 };
 
-const reducer = (state, { type, payload }) => {
+const reducer = (state = initialState, { type, payload }) => {
 	switch (type) {
 		case actions.ADD_TO_CART: {
 			const existingItem = state.cart.cartItems.find((item) => item._id === payload._id);

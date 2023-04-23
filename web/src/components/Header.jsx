@@ -4,6 +4,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { actions, Store } from '../Store';
+import SearchBox from './SearchBox';
 
 export function Header() {
 	const {
@@ -32,6 +33,7 @@ export function Header() {
 					<LinkContainer to='/' className='fw-bold'>
 						<Navbar.Brand>E Shop</Navbar.Brand>
 					</LinkContainer>
+					<SearchBox />
 					<nav className='ms-auto d-flex justify-content-end text-white'>
 						<Link to='/cart' className='nav-link me-3'>
 							<i className='fas fa-shopping-cart' />

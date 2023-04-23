@@ -33,8 +33,7 @@ function OrderPage() {
 				onFail(getError(err));
 			}
 		};
-
-		if (!order) getOrder();
+		if (!order || (order._id && orderId !== order._id)) getOrder();
 	}, [navigate, order, orderId, userInfo]);
 
 	return (
