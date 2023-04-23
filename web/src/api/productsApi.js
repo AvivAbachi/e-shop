@@ -1,6 +1,4 @@
-import axios from 'axios';
-
-axios.defaults.baseURL = 'http://localhost:5000';
+import axios from './index';
 
 async function getProducts() {
 	return await axios.get('api/v1/products/');

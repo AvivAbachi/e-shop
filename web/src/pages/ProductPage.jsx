@@ -46,64 +46,65 @@ function ProductPage() {
 
 	return (
 		<div>
+			<Helmet>
+				<title>E Shop - {product?.title ?? 'Product'}</title>
+			</Helmet>
 			{loading ? (
 				<Loading />
 			) : error ? (
 				<MessageBox variant='danger'>{error}</MessageBox>
 			) : product ? (
-				<div>
-					<Row>
-						<Col md={6}>
-							<img className='img-large' src={`../${product.image}`} alt={product.title} />
-						</Col>
-						<Col md={3}>
-							<ListGroup>
-								<ListGroup.Item>
-									<Helmet>
-										<title>{product.title}</title>
-									</Helmet>
-									<h1>{product.title}</h1>
-								</ListGroup.Item>
-								<ListGroup.Item>
-									<Rating rating={product.rating} totalReviews={product.totalReviews} />
-								</ListGroup.Item>
-								<ListGroup.Item>Price: ${product.price}</ListGroup.Item>
-								<ListGroup.Item>
-									Description: <p className='lead'>{product.description}</p>
-								</ListGroup.Item>
-							</ListGroup>
-						</Col>
-						<Col md={3}>
-							<Card>
-								<Card.Body>
-									<ListGroup variant='flush'>
+				<Row>
+					<Col md={6}>
+						<img className='img-large' src={`../${product.image}`} alt={product.title} />
+					</Col>
+					<Col md={3}>
+						<ListGroup>
+							<ListGroup.Item>
+								<Helmet>
+									<title>{product.title}</title>
+								</Helmet>
+								<h1>{product.title}</h1>
+							</ListGroup.Item>
+							<ListGroup.Item>
+								<Rating rating={product.rating} totalReviews={product.totalReviews} />
+							</ListGroup.Item>
+							<ListGroup.Item>Price: ${product.price}</ListGroup.Item>
+							<ListGroup.Item>
+								Description: <p className='lead'>{product.description}</p>
+							</ListGroup.Item>
+						</ListGroup>
+					</Col>
+					<Col md={3}>
+						<Card>
+							<Card.Body>
+								<ListGroup variant='flush'>
+									<ListGroup.Item>
+										<Row>
+											<Col>Price:</Col>
+											<Col>${product.price}</Col>
+										</Row>
+									</ListGroup.Item>
+									<ListGroup.Item>
+										<Row>
+											<Col>Status:</Col>
+											<Col>{product.stock > 0 ? <Badge bg='success'>In Stock</Badge> : <Badge bg='danger'>Not in Stock</Badge>}</Col>
+										</Row>
+									</ListGroup.Item>
+									{product.stock > 0 && (
 										<ListGroup.Item>
-											<Row>
-												<Col>Price:</Col>
-												<Col>${product.price}</Col>
-											</Row>
+											<div className='d-grid'>
+												<Button onClick={addToCartHandler} variant='primary'>
+													Add to cart
+												</Button>
+											</div>
 										</ListGroup.Item>
-										<ListGroup.Item>
-											<Row>
-												<Col>Status:</Col>
-												<Col>{product.stock > 0 ? <Badge bg='success'>In Stock</Badge> : <Badge bg='danger'>Not in Stock</Badge>}</Col>
-											</Row>
-										</ListGroup.Item>
-										{product.stock > 0 && (
-											<ListGroup.Item>
-												<div className='d-grid'>
-													<Button onClick={addToCartHandler} variant='primary'>
-														Add to cart
-													</Button>
-												</div>
-											</ListGroup.Item>
-										)}
-									</ListGroup>
-								</Card.Body>
-							</Card>
-						</Col>
-					</Row>
-				</div>
+									)}
+								</ListGroup>
+							</Card.Body>
+						</Card>
+					</Col>
+				</Row>
 			) : null}
 		</div>
 	);

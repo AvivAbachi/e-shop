@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import productsApi from '../api/productsApi';
+import CartItem from '../components/CartItem';
 import MessageBox from '../components/MessageBox';
 import { actions, Store } from '../Store';
 
@@ -18,9 +19,9 @@ function CartPage() {
 
 		if (data.stock < quantity) {
 			toast.error('Sorry. Product is out of stock');
-			return;
+		} else {
+			dispatch({ type: actions.ADD_TO_CART, payload: { ...item, quantity } });
 		}
-		dispatch({ type: actions.ADD_TO_CART, payload: { ...item, quantity } });
 	}
 
 	function removeItemHandler(item) {
@@ -34,8 +35,9 @@ function CartPage() {
 	return (
 		<div>
 			<Helmet>
-				<title>Shopping Cart</title>
+				<title>E Shop - Shopping Cart</title>
 			</Helmet>
+			<h1>Shopping Cart</h1>
 			<Row>
 				<Col md={8}>
 					{cartItems.length === 0 ? (
@@ -43,41 +45,27 @@ function CartPage() {
 							Your cart is empty. <Link to='/'>Go back to Home Page</Link>
 						</MessageBox>
 					) : (
-						<ListGroup>
-							{cartItems.map((product) => (
-								<ListGroup.Item key={product._id}>
-									<Row className='align-items-center'>
-										<Col md={4}>
-											<img className='img-fluid rounded img-thumbnail' src={product.image} alt={product.title} />{' '}
-											<Link to={`/products/${product.token}`}>{product.title}</Link>
-										</Col>
-										<Col md={3}>
-											<Button
-												onClick={() => updateCartHandler(product, product.quantity - 1)}
-												variant='light'
-												disabled={product.quantity === 1}
-											>
-												<i className='fas fa-minus-circle' />
-											</Button>{' '}
-											<span>{product.quantity}</span>{' '}
-											<Button
-												variant='light'
-												disabled={product.quantity === product.stock}
-												onClick={() => updateCartHandler(product, product.quantity + 1)}
-											>
-												<i className='fas fa-plus-circle' />
-											</Button>
-										</Col>
-										<Col md={3}>{product.price} $</Col>
-										<Col md={2}>
-											<Button variant='light' onClick={() => removeItemHandler(product)}>
-												<i className='fas fa-trash' />
-											</Button>
-										</Col>
-									</Row>
-								</ListGroup.Item>
-							))}
-						</ListGroup>
+						<Card>
+							<Card.Body>
+								<Card.Title>Items</Card.Title>
+								<ListGroup variant='flush'>
+									{cartItems.map((product) => (
+										<CartItem
+											key={product._id}
+											title={product.title}
+											image={product.image}
+											price={product.price}
+											quantity={product.quantity}
+											stock={product.stock}
+											token={product.token}
+											onIncrease={() => updateCartHandler(product, product.quantity + 1)}
+											onDecrease={() => updateCartHandler(product, product.quantity - 1)}
+											onRemove={() => removeItemHandler(product)}
+										/>
+									))}
+								</ListGroup>
+							</Card.Body>
+						</Card>
 					)}
 				</Col>
 				<Col md={4}>

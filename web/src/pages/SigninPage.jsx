@@ -39,7 +39,7 @@ function SigninPage() {
 	return (
 		<Container className='small-container'>
 			<Helmet>
-				<title>Sign In</title>
+				<title>E Shop - Sign In</title>
 			</Helmet>
 			<h1 className='my-3'>Sign In</h1>
 			<Form onSubmit={submitHandler}>
@@ -64,4 +64,5 @@ function SigninPage() {
 		</Container>
 	);
 }
+
 export default SigninPage;

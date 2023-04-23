@@ -2,7 +2,7 @@ import { useReducer, useRef } from 'react';
 
 const initState = {
 	data: null,
-	error: '',
+	error: null,
 	loading: false,
 };
 

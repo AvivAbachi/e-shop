@@ -4,9 +4,9 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 
 import CheckoutSteps from '../components/CheckoutSteps';
-import { Store, actions } from '../Store';
+import { actions, Store } from '../Store';
 
-export default function ShippingAddressPage() {
+function ShippingAddressPage() {
 	const navigate = useNavigate();
 	const { state, dispatch } = useContext(Store);
 	const {
@@ -38,7 +38,7 @@ export default function ShippingAddressPage() {
 	return (
 		<div>
 			<Helmet>
-				<title>Shipping Address</title>
+				<title>E Shop - Shipping Address</title>
 			</Helmet>
 			<CheckoutSteps step1 step2 />
 			<div className='container small-container'>
@@ -74,3 +74,5 @@ export default function ShippingAddressPage() {
 		</div>
 	);
 }
+
+export default ShippingAddressPage;

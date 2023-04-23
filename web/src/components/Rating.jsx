@@ -33,12 +33,12 @@ function Rating({
 		return starsArray;
 	}, [rating, numStars, getRatingIcon]);
 
+	const reviewText = useMemo(() => `${totalReviews} ${totalReviews === 1 ? 'Review' : 'Reviews'}`, [totalReviews]);
+
 	return (
 		<div className='rating' aria-label={`Rating: ${rating} out of ${numStars}`}>
 			{stars}
-			<span>
-				{totalReviews} {totalReviews === 1 ? 'Review' : 'Reviews'}
-			</span>
+			<span> {reviewText}</span>
 		</div>
 	);
 }

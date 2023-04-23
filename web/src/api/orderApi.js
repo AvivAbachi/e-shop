@@ -1,10 +1,9 @@
-import axios from 'axios';
-
-axios.defaults.baseURL = 'http://localhost:5000';
+import axios from './index';
 
 async function getOrder(orderId, token) {
 	return await axios.get(`/api/v1/orders/${orderId}`, { headers: { authorization: `Bearer ${token}` } });
 }
+
 async function createOrder({ orderItems, shippingAddress, paymentMethod, itemsPrice, shippingPrice, taxPrice, totalPrice }, token) {
 	return await axios.post(
 		'/api/v1/orders',

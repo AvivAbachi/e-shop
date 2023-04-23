@@ -1,11 +1,11 @@
 import { useContext } from 'react';
 import { Button, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import productsApi from '../api/productsApi';
 import { actions, Store } from '../Store';
 import Rating from './Rating';
-import { toast } from 'react-toastify';
 
 function ProductCard({ product }) {
 	const { state, dispatch } = useContext(Store);

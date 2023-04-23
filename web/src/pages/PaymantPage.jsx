@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 
 import CheckoutSteps from '../components/CheckoutSteps';
-import { Store, actions } from '../Store';
+import { actions, Store } from '../Store';
 
 function PaymantPage() {
 	const navigate = useNavigate();
@@ -29,11 +29,11 @@ function PaymantPage() {
 	return (
 		<div>
 			<Helmet>
-				<title>Shipping Address</title>
+				<title>E Shop - Payment Method</title>
 			</Helmet>
 			<CheckoutSteps step1 step2 step3 />
 			<div className='container small-container'>
-				<h1 className='my-3'>Shipping Address</h1>
+				<h1 className='my-3'>Payment Method</h1>
 				<Form onSubmit={submitHandler}>
 					<div className='mb-3'>
 						<Form.Check

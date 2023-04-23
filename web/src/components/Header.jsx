@@ -46,10 +46,9 @@ export function Header() {
 								<LinkContainer to='/profile'>
 									<NavDropdown.Item>User Profile</NavDropdown.Item>
 								</LinkContainer>
-								<LinkContainer to='/order/hisory'>
+								<LinkContainer to='/order/history'>
 									<NavDropdown.Item>Order History</NavDropdown.Item>
 								</LinkContainer>
-								{/* <LinkContainer to='/'></LinkContainer> */}
 								<NavDropdown.Item onClick={signgoutHandelr}>Sign Out</NavDropdown.Item>
 							</NavDropdown>
 						) : (

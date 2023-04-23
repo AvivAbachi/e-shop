@@ -52,6 +52,9 @@ main {
 .img-thumbnail {
 	height: 200px;
 }
+.img-large {
+	width: 100%;
+}
 .small-container {
 	max-width: 600px;
 }

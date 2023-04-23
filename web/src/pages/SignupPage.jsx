@@ -45,7 +45,7 @@ function SignupPage() {
 	return (
 		<Container className='small-container'>
 			<Helmet>
-				<title>Sign Up</title>
+				<title>E Shop - Sign Up</title>
 			</Helmet>
 			<h1 className='my-3'>Sign Up</h1>
 			<Form onSubmit={submitHandler}>
@@ -75,4 +75,5 @@ function SignupPage() {
 		</Container>
 	);
 }
+
 export default SignupPage;
