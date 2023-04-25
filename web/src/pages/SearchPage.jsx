@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Badge, Button, Col, Row } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -27,15 +27,18 @@ function SearchPage() {
 	const order = searchParams.get('order') || 'newest';
 	const page = searchParams.has('page') ? Number(searchParams.get('page')) : 1;
 
-	const getFilterUrl = (filter = {}, skipPathname = false) => {
-		const params = new URLSearchParams(search);
-		Object.entries(filter).forEach(([name, value]) => {
-			if (value) params.set(name, value);
-			else if (!value && params.has(name)) params.delete(name);
-		});
-		if (filter?.page && filter.page == 1) params.delete('page');
-		return (skipPathname ? '?' : '/search?') + params.toString();
-	};
+	const getFilterUrl = useCallback(
+		(filter = {}, skipPathname = false) => {
+			const params = new URLSearchParams(search);
+			Object.entries(filter).forEach(([name, value]) => {
+				if (value) params.set(name, value);
+				else if (!value && params.has(name)) params.delete(name);
+			});
+			if (filter?.page && filter.page == 1) params.delete('page');
+			return (skipPathname ? '?' : '/search?') + params.toString();
+		},
+		[search]
+	);
 
 	useEffect(() => {
 		const getCategories = async () => {

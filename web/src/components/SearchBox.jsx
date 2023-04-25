@@ -8,8 +8,11 @@ function SearchBox() {
 
 	const submitHandler = (e) => {
 		e.preventDefault();
-		navigate(`/search/${query ? `?query=${query}` : ''}`);
+		const trim = query.trim();
+		setQuery(trim);
+		navigate(`/search${trim ? `/?query=${trim}` : ''}`);
 	};
+
 	return (
 		<Form onSubmit={submitHandler} className='d-flex mx-auto w-50'>
 			<InputGroup>
@@ -17,7 +20,9 @@ function SearchBox() {
 					aria-describedby='button-search'
 					name='query'
 					id='query'
+					type='search'
 					placeholder='Search for products'
+					value={query}
 					onChange={(e) => setQuery(e.target.value)}
 				/>
 				<Button variant='outline-primary' type='submit' id='button-search'>

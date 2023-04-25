@@ -56,7 +56,7 @@ function ProductPage() {
 			) : product ? (
 				<Row>
 					<Col md={6}>
-						<img className='w-100' src={`../${product.image}`} alt={product.title} />
+						<img className='w-100' src={product.image} alt={product.title} />
 					</Col>
 					<Col md={3}>
 						<ListGroup>
