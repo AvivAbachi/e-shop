@@ -29,6 +29,9 @@ a {
 .rating i {
 	color: #ffc000;
 }
+.fw-bold .rating span {
+	font-weight: bold !important;
+}
 .btn-primary,
 .btn-outline-primary {
 	background-color: #f0c040;

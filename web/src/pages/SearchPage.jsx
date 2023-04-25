@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Badge, Button, Col, Row } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -16,30 +16,25 @@ import { getError } from '../utils';
 function SearchPage() {
 	const navigate = useNavigate();
 	const { search } = useLocation();
-	const searchParam = new URLSearchParams(search);
-
+	const { loading, data, error, onFail, onRequest, onSuccess } = useRequest();
 	const [categories, setCategories] = useState([]);
 
-	const category = searchParam.get('category') || 'all';
-	const query = searchParam.get('query') || 'all';
-	const price = searchParam.get('price') || 'all';
-	const rating = searchParam.get('rating') || 'all';
-	const order = searchParam.get('order') || 'newest';
-	const page = searchParam.get('page') || 1;
+	const searchParams = new URLSearchParams(search);
+	const category = searchParams.get('category');
+	const query = searchParams.get('query');
+	const price = searchParams.get('price');
+	const rating = searchParams.has('rating') ? Number(searchParams.get('rating')) : null;
+	const order = searchParams.get('order') || 'newest';
+	const page = searchParams.has('page') ? Number(searchParams.get('page')) : 1;
 
-	const { loading, data, error, onFail, onRequest, onSuccess } = useRequest();
-
-	const getFilterUrl = (filter, skipPathname) => {
-		const filterPage = filter.page || page;
-		const filterCategory = filter.category || category;
-		const filterQuery = filter.query || query;
-		const filterRating = filter.rating || rating;
-		const filterPrice = filter.price || price;
-		const sortOrder = filter.order || order;
-		const link = `${
-			skipPathname ? '' : '/search?'
-		}category=${filterCategory}&query=${filterQuery}&price=${filterPrice}&rating=${filterRating}&order=${sortOrder}&page=${filterPage}`;
-		return link;
+	const getFilterUrl = (filter = {}, skipPathname = false) => {
+		const params = new URLSearchParams(search);
+		Object.entries(filter).forEach(([name, value]) => {
+			if (value) params.set(name, value);
+			else if (!value && params.has(name)) params.delete(name);
+		});
+		if (filter?.page && filter.page == 1) params.delete('page');
+		return (skipPathname ? '?' : '/search?') + params.toString();
 	};
 
 	useEffect(() => {
@@ -58,14 +53,15 @@ function SearchPage() {
 		const getData = async () => {
 			onRequest();
 			try {
-				const { data } = await productsApi.searchProduct(page, query, category, price, rating, order);
+				const params = new URLSearchParams(search);
+				const { data } = await productsApi.searchProducts(params.toString());
 				onSuccess(data);
 			} catch (err) {
 				onFail(getError(err));
 			}
 		};
 		getData();
-	}, [page, query, category, price, rating, order]);
+	}, [search]);
 
 	return (
 		<div>
@@ -78,13 +74,13 @@ function SearchPage() {
 					<div>
 						<ul>
 							<li>
-								<Link className={'all' === category ? 'fw-bold' : ''} to={getFilterUrl({ category: 'all' })}>
+								<Link className={category === null ? 'fw-bold' : ''} to={getFilterUrl({ category: null })}>
 									Any
 								</Link>
 							</li>
 							{categories.map((c) => (
 								<li key={c}>
-									<Link className={c === category ? 'fw-bold' : ''} to={getFilterUrl({ category: c })}>
+									<Link className={category === c ? 'fw-bold' : ''} to={getFilterUrl({ category: c })}>
 										{c}
 									</Link>
 								</li>
@@ -95,13 +91,13 @@ function SearchPage() {
 						<h3>Price</h3>
 						<ul>
 							<li>
-								<Link className={'all' === price ? 'fw-bold' : ''} to={getFilterUrl({ price: 'all' })}>
+								<Link className={price === null ? 'fw-bold' : ''} to={getFilterUrl({ price: null })}>
 									Any
 								</Link>
 							</li>
 							{prices.map((p) => (
 								<li key={p.value}>
-									<Link to={getFilterUrl({ price: p.value })} className={p.value === price ? 'fw-bold' : ''}>
+									<Link to={getFilterUrl({ price: p.value })} className={price === p.value ? 'fw-bold' : ''}>
 										{p.name}
 									</Link>
 								</li>
@@ -111,9 +107,14 @@ function SearchPage() {
 					<div>
 						<h3>Reviews</h3>
 						<ul>
+							<li>
+								<Link to={getFilterUrl({ rating: null })} className={rating === null ? 'fw-bold' : ''}>
+									Any
+								</Link>
+							</li>
 							{ratings.map((r) => (
-								<li key={r.name}>
-									<Link to={getFilterUrl({ rating: r.rating })} className={`${r.rating}` === `${rating}` ? 'fw-bold' : ''}>
+								<li className={rating == r.rating ? 'fw-bold' : undefined} key={r.name}>
+									<Link to={getFilterUrl({ rating: r.rating })}>
 										<Rating rating={r.rating} caption={r.name} />
 									</Link>
 								</li>
@@ -130,17 +131,36 @@ function SearchPage() {
 						<>
 							<Row className='justify-content-between mb-3'>
 								<Col md={6}>
-									<div>
+									<div className='d-flex flex-warp gap-2 align-items-center'>
 										{data?.countProducts === 0 ? 'No' : data?.countProducts} Results
-										{query !== 'all' && ' : ' + query}
-										{category !== 'all' && ' : ' + category}
-										{price !== 'all' && ' : Price ' + price}
-										{rating !== 'all' && ' : Rating ' + rating + ' & up'}
-										{query !== 'all' || category !== 'all' || rating !== 'all' || price !== 'all' ? (
-											<Button variant='light' onClick={() => navigate('/search')}>
-												<i className='fas fa-times-circle' />
-											</Button>
-										) : null}
+										{query && (
+											<Link to={getFilterUrl({ query: null })}>
+												<Badge pill bg='warning' className='text-dark'>
+													{query} <i className='fas fa-times-circle' />
+												</Badge>
+											</Link>
+										)}
+										{category && (
+											<Link to={getFilterUrl({ category: null })}>
+												<Badge pill bg='warning' className='text-dark'>
+													{category} <i className='fas fa-times-circle' />
+												</Badge>
+											</Link>
+										)}
+										{price && (
+											<Link to={getFilterUrl({ price: null })}>
+												<Badge pill bg='warning' className='text-dark'>
+													{price} <i className='fas fa-times-circle' />
+												</Badge>
+											</Link>
+										)}
+										{rating && (
+											<Link to={getFilterUrl({ rating: null })}>
+												<Badge pill bg='warning' className='text-dark'>
+													{ratings.find((r) => r.rating === rating).name} <i className='fas fa-times-circle' />
+												</Badge>
+											</Link>
+										)}
 									</div>
 								</Col>
 								<Col className='text-end'>
@@ -151,7 +171,7 @@ function SearchPage() {
 											navigate(getFilterUrl({ order: e.target.value }));
 										}}
 									>
-										<option value='newest'>Newest Arrivals</option>
+										<option value=''>Newest Arrivals</option>
 										<option value='lowest'>Price: Low to High</option>
 										<option value='highest'>Price: High to Low</option>
 										<option value='toprated'>Customer Reviews</option>
@@ -199,8 +219,8 @@ const prices = [
 ];
 
 export const ratings = [
-	{ name: '4stars & up', rating: 4 },
-	{ name: '3stars & up', rating: 3 },
-	{ name: '2stars & up', rating: 2 },
-	{ name: '1stars & up', rating: 1 },
+	{ name: '4 Stars & Up', rating: 4 },
+	{ name: '3 Stars & Up', rating: 3 },
+	{ name: '2 Stars & Up', rating: 2 },
+	{ name: '1 Stars & Up', rating: 1 },
 ];

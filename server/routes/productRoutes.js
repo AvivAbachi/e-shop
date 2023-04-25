@@ -26,78 +26,61 @@ productRouter.get(
 productRouter.get(
 	'/search',
 	expressAsyncHandler(async (req, res) => {
-		const pageSize = req.query.pageSize || PAGE_SIZE;
-		const page = req.query.page || 1;
-		const category = req.query.category || '';
-		const price = req.query.price || '';
-		const rating = req.query.rating || '';
-		const order = req.query.order || '';
-		const searchQuery = req.query.query || '';
-		console.log(searchQuery);
-		const queryFilter =
-			searchQuery && searchQuery !== 'all'
-				? {
-						title: {
-							$regex: searchQuery,
-							$options: 'i',
-						},
-				  }
-				: {};
+		try {
+			const pageSize = Number(req.query.pageSize) || PAGE_SIZE;
+			const page = Number(req.query.page) || 1;
+			const category = req.query.category;
+			const price = req.query.price;
+			const rating = Number(req.query.rating);
+			const order = req.query.order || 'newest';
+			const searchQuery = req.query.query;
 
-		const categoryFilter = category && category !== 'all' ? { category } : {};
+			if (page < 1 || pageSize < 1) {
+				throw new Error('Invalid page or page size');
+			}
 
-		const ratingFilter =
-			rating && rating !== 'all'
-				? {
-						rating: {
-							$gte: Number(rating),
-						},
-				  }
-				: {};
-		const priceFilter =
-			price && price !== 'all'
-				? {
-						price: {
-							$gte: Number(price.split('-')[0]),
-							$lte: Number(price.split('-')[1]),
-						},
-				  }
-				: {};
+			const filters = {};
+			if (searchQuery) {
+				filters.title = { $regex: searchQuery, $options: 'i' };
+			}
+			if (category) {
+				filters.category = category;
+			}
+			if (rating) {
+				filters.rating = { $gte: rating };
+			}
+			if (price) {
+				const [min, max] = price.split('-').map(parseFloat);
+				filters.price = { $gte: min, $lte: max };
+			}
 
-		const sortOrder =
-			order === 'lowest'
-				? { price: 1 }
-				: order === 'highest'
-				? { price: -1 }
-				: order === 'toprated'
-				? { rating: -1 }
-				: order === 'newest'
-				? { createdAt: -1 }
-				: { _id: -1 };
+			const sortOrder =
+				order === 'lowest'
+					? { price: 1 }
+					: order === 'highest'
+					? { price: -1 }
+					: order === 'toprated'
+					? { rating: -1 }
+					: order === 'newest'
+					? { createdAt: -1 }
+					: { _id: -1 };
 
-		const products = await Product.find({
-			...queryFilter,
-			...categoryFilter,
-			...priceFilter,
-			...ratingFilter,
-		})
-			.sort(sortOrder)
-			.skip(pageSize * (page - 1))
-			.limit(pageSize);
+			const products = await Product.find(filters)
+				.sort(sortOrder)
+				.skip(pageSize * (page - 1))
+				.limit(pageSize);
 
-		const countProducts = await Product.countDocuments({
-			...queryFilter,
-			...categoryFilter,
-			...priceFilter,
-			...ratingFilter,
-		});
+			const countProducts = await Product.countDocuments(filters);
 
-		res.send({
-			products,
-			countProducts,
-			page,
-			pages: Math.ceil(countProducts / pageSize),
-		});
+			res.send({
+				products,
+				countProducts,
+				page,
+				pages: Math.ceil(countProducts / pageSize),
+			});
+		} catch (error) {
+			res.status(400).json({ message: error.message });
+		}
 	})
 );
 
