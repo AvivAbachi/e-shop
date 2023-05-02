@@ -11,12 +11,20 @@ import { isAuth } from '../utils/index.js';
 const orderRouter = express.Router();
 
 orderRouter.get(
+	'/all',
+	isAuth,
+	expressAsyncHandler(async (req, res) => {
+		const orders = await Order.find({ user: req.user._id }).sort({ createdAt: -1 });
+		res.send(orders);
+	})
+);
+
+orderRouter.get(
 	'/:id',
 	isAuth,
 	expressAsyncHandler(async (req, res) => {
 		const order = await Order.findById(req.params.id);
-		console.log(order.user._id, req.user._id);
-		if (order && order.user._id === req.user._id) {
+		if (order && order.user._id.toString() === req.user._id) {
 			res.send(order);
 		} else {
 			res.status(404).send({ message: 'Order not found' });
@@ -95,28 +103,6 @@ orderRouter.post(
 // 			},
 // 		]);
 // 		res.send({ users, orders, dailyOrders, productCategories });
-// 	})
-// );
-
-// orderRouter.get(
-// 	'/mine',
-// 	isAuth,
-// 	expressAsyncHandler(async (req, res) => {
-// 		const orders = await Order.find({ user: req.user._id });
-// 		res.send(orders);
-// 	})
-// );
-
-// orderRouter.get(
-// 	'/:id',
-// 	isAuth,
-// 	expressAsyncHandler(async (req, res) => {
-// 		const order = await Order.findById(req.params.id);
-// 		if (order) {
-// 			res.send(order);
-// 		} else {
-// 			res.status(404).send({ message: 'Order Not Found' });
-// 		}
 // 	})
 // );
 

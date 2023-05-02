@@ -3,27 +3,24 @@ import { Button, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import productsApi from '../api/productsApi';
 import { actions, Store } from '../Store';
+import { tryAddToCart } from '../utils';
 import Rating from './Rating';
 
 function ProductCard({ product }) {
 	const { state, dispatch } = useContext(Store);
 
 	const addToCartHandler = async () => {
-		const existedItem = state.cart.cartItems.find((x) => x._id === product._id);
-		const quantity = existedItem ? existedItem.quantity + 1 : 1;
-		const { data } = await productsApi.getProductById(product._id);
-
-		if (data.stock < quantity) {
-			toast.error('Sorry. Product is out of stock');
-			return;
+		try {
+			const quantity = await tryAddToCart(state.cart, product);
+			toast.success('Product add to cart', { hideProgressBar: true, progress: 0.5 });
+			dispatch({
+				type: actions.ADD_TO_CART,
+				payload: { ...product, quantity },
+			});
+		} catch (err) {
+			toast.error(err);
 		}
-
-		dispatch({
-			type: actions.ADD_TO_CART,
-			payload: { ...product, quantity },
-		});
 	};
 
 	return (
