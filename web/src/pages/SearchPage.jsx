@@ -11,7 +11,7 @@ import MessageBox from '../components/MessageBox';
 import ProductCard from '../components/ProductCard';
 import Rating from '../components/Rating';
 import useRequest from '../hooks/useRequest';
-import { getError } from '../utils';
+import { searchFilter, getError } from '../utils';
 
 function SearchPage() {
 	const navigate = useNavigate();
@@ -29,13 +29,8 @@ function SearchPage() {
 
 	const getFilterUrl = useCallback(
 		(filter = {}, skipPathname = false) => {
-			const params = new URLSearchParams(search);
-			Object.entries(filter).forEach(([name, value]) => {
-				if (value) params.set(name, value);
-				else if (!value && params.has(name)) params.delete(name);
-			});
-			if (filter?.page && filter.page == 1) params.delete('page');
-			return (skipPathname ? '?' : '/search?') + params.toString();
+			const params = searchFilter(filter, search);
+			return (skipPathname ? '?' : '/search?') + params;
 		},
 		[search]
 	);
@@ -56,15 +51,14 @@ function SearchPage() {
 		const getData = async () => {
 			onRequest();
 			try {
-				const params = new URLSearchParams(search);
-				const { data } = await productsApi.searchProducts(params.toString());
+				const { data } = await productsApi.searchProducts({ category, query, price, rating, order, page }, search);
 				onSuccess(data);
 			} catch (err) {
 				onFail(getError(err));
 			}
 		};
 		getData();
-	}, [search]);
+	}, [search, category, query, price, rating, order, page]);
 
 	return (
 		<div>
@@ -74,56 +68,50 @@ function SearchPage() {
 			<Row>
 				<Col md={3} className='filter-list'>
 					<h3>Category</h3>
-					<div>
-						<ul>
-							<li>
-								<Link className={category === null ? 'fw-bold' : ''} to={getFilterUrl({ category: null })}>
-									Any
+					<ul>
+						<li>
+							<Link className={category === null ? 'fw-bold' : ''} to={getFilterUrl({ category: null })}>
+								Any
+							</Link>
+						</li>
+						{categories.map((c) => (
+							<li key={c}>
+								<Link className={category === c ? 'fw-bold' : ''} to={getFilterUrl({ category: c })}>
+									{c}
 								</Link>
 							</li>
-							{categories.map((c) => (
-								<li key={c}>
-									<Link className={category === c ? 'fw-bold' : ''} to={getFilterUrl({ category: c })}>
-										{c}
-									</Link>
-								</li>
-							))}
-						</ul>
-					</div>
-					<div>
-						<h3>Price</h3>
-						<ul>
-							<li>
-								<Link className={price === null ? 'fw-bold' : ''} to={getFilterUrl({ price: null })}>
-									Any
+						))}
+					</ul>
+					<h3>Price</h3>
+					<ul>
+						<li>
+							<Link className={price === null ? 'fw-bold' : ''} to={getFilterUrl({ price: null })}>
+								Any
+							</Link>
+						</li>
+						{prices.map((p) => (
+							<li key={p.value}>
+								<Link to={getFilterUrl({ price: p.value })} className={price === p.value ? 'fw-bold' : ''}>
+									{p.name}
 								</Link>
 							</li>
-							{prices.map((p) => (
-								<li key={p.value}>
-									<Link to={getFilterUrl({ price: p.value })} className={price === p.value ? 'fw-bold' : ''}>
-										{p.name}
-									</Link>
-								</li>
-							))}
-						</ul>
-					</div>
-					<div>
-						<h3>Reviews</h3>
-						<ul>
-							<li>
-								<Link to={getFilterUrl({ rating: null })} className={rating === null ? 'fw-bold' : ''}>
-									Any
+						))}
+					</ul>
+					<h3>Reviews</h3>
+					<ul>
+						<li>
+							<Link to={getFilterUrl({ rating: null })} className={rating === null ? 'fw-bold' : ''}>
+								Any
+							</Link>
+						</li>
+						{ratings.map((r) => (
+							<li className={rating == r.rating ? 'fw-bold' : undefined} key={r.name}>
+								<Link to={getFilterUrl({ rating: r.rating })}>
+									<Rating rating={r.rating} caption={r.name} />
 								</Link>
 							</li>
-							{ratings.map((r) => (
-								<li className={rating == r.rating ? 'fw-bold' : undefined} key={r.name}>
-									<Link to={getFilterUrl({ rating: r.rating })}>
-										<Rating rating={r.rating} caption={r.name} />
-									</Link>
-								</li>
-							))}
-						</ul>
-					</div>
+						))}
+					</ul>
 				</Col>
 				<Col md={9}>
 					{loading ? (

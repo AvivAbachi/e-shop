@@ -1,3 +1,4 @@
+import { searchFilter } from '../utils';
 import axios from './index';
 
 async function getProducts() {
@@ -12,8 +13,8 @@ async function getProductById(id) {
 	return await axios.get(`api/v1/products/${id}`);
 }
 
-async function searchProducts(searchUrl) {
-	return await axios.get(`api/v1/products/search?${searchUrl}`);
+async function searchProducts(filters = {}, search) {
+	return await axios.get(`api/v1/products/search?${searchFilter(filters, search)}`);
 }
 
 async function getCategories() {
