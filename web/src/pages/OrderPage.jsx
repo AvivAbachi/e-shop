@@ -47,7 +47,7 @@ function OrderPage() {
 				<Loading />
 			) : (
 				<div>
-					<h1 className='my-3'>Order {order._id}</h1>
+					<h1 className='my-3'>Order #{order._id}</h1>
 					<Row>
 						<Col md={8}>
 							<Card className='mb-3'>

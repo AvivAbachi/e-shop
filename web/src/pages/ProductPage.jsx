@@ -18,17 +18,16 @@ function ProductPage() {
 	const { onFail, onSuccess, onRequest, data: product, error, loading } = useRequest();
 
 	const addToCartHandler = async () => {
-		const existedItem = state.cart.cartItems.find((x) => x._id === product._id);
-		const quantity = existedItem ? existedItem.quantity + 1 : 1;
-		const { data } = await productsApi.getProductById(product._id);
-
-		if (data.stock < quantity) {
-			toast.error('Product is out of stock');
-			return;
+		try {
+			const quantity = await tryAddToCart(state.cart, product);
+			dispatch({
+				type: actions.ADD_TO_CART,
+				payload: { ...product, quantity },
+			});
+			navigate('/cart');
+		} catch (err) {
+			toast.error(err);
 		}
-
-		dispatch({ type: actions.ADD_TO_CART, payload: { ...product, quantity } });
-		navigate('/cart');
 	};
 
 	useEffect(() => {
