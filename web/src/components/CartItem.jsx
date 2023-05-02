@@ -8,7 +8,6 @@ function CartItem({ title, token, image, quantity, price, stock, onIncrease, onD
 				<Col md={4}>
 					<Link to={`/products/${token}`}>
 						<img className='img-fluid rounded img-thumbnail' src={image} alt={title} />
-						<div>{title}</div>
 					</Link>
 				</Col>
 				<Col md={3}>
@@ -33,6 +32,7 @@ function CartItem({ title, token, image, quantity, price, stock, onIncrease, onD
 					</Col>
 				)}
 			</Row>
+			<Link to={`/products/${token}`}>{title}</Link>
 		</ListGroupItem>
 	);
 }

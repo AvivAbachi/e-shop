@@ -9,7 +9,7 @@ function App() {
 	return (
 		<div className='d-flex flex-column side-allpage'>
 			<Header />
-			<main className='mt-5'>
+			<main className='mt-5 p-5'>
 				<Container>
 					<Outlet />
 				</Container>

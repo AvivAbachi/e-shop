@@ -42,7 +42,7 @@ function ProductPage() {
 			}
 		};
 		getData();
-	}, []);
+	}, [token]);
 
 	return (
 		<div>

@@ -13,12 +13,13 @@ async function getProductById(id) {
 }
 
 async function searchProducts(searchUrl) {
-	return await axios.get(`api/v1/products/search?${searchUrl}`);
+	return await axios.get(`api/v1/products/search${searchUrl}`);
 }
 
 async function getCategories() {
 	return await axios.get('api/v1/products/categories');
 }
+
 export default {
 	getProducts,
 	getProductByToken,

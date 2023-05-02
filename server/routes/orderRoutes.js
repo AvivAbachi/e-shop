@@ -15,8 +15,7 @@ orderRouter.get(
 	isAuth,
 	expressAsyncHandler(async (req, res) => {
 		const order = await Order.findById(req.params.id);
-		console.log(order.user._id, req.user._id);
-		if (order && order.user._id === req.user._id) {
+		if (order && order.user._id.toString() === req.user._id) {
 			res.send(order);
 		} else {
 			res.status(404).send({ message: 'Order not found' });
@@ -104,19 +103,6 @@ orderRouter.post(
 // 	expressAsyncHandler(async (req, res) => {
 // 		const orders = await Order.find({ user: req.user._id });
 // 		res.send(orders);
-// 	})
-// );
-
-// orderRouter.get(
-// 	'/:id',
-// 	isAuth,
-// 	expressAsyncHandler(async (req, res) => {
-// 		const order = await Order.findById(req.params.id);
-// 		if (order) {
-// 			res.send(order);
-// 		} else {
-// 			res.status(404).send({ message: 'Order Not Found' });
-// 		}
 // 	})
 // );
 

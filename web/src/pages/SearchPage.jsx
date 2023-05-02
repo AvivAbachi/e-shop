@@ -56,8 +56,7 @@ function SearchPage() {
 		const getData = async () => {
 			onRequest();
 			try {
-				const params = new URLSearchParams(search);
-				const { data } = await productsApi.searchProducts(params.toString());
+				const { data } = await productsApi.searchProducts(search);
 				onSuccess(data);
 			} catch (err) {
 				onFail(getError(err));
@@ -133,40 +132,38 @@ function SearchPage() {
 					) : (
 						<>
 							<Row className='justify-content-between mb-3'>
-								<Col md={6}>
-									<div className='d-flex flex-warp gap-2 align-items-center'>
-										{data?.countProducts === 0 ? 'No' : data?.countProducts} Results
-										{query && (
-											<Link to={getFilterUrl({ query: null })}>
-												<Badge pill bg='warning' className='text-dark'>
-													{query} <i className='fas fa-times-circle' />
-												</Badge>
-											</Link>
-										)}
-										{category && (
-											<Link to={getFilterUrl({ category: null })}>
-												<Badge pill bg='warning' className='text-dark'>
-													{category} <i className='fas fa-times-circle' />
-												</Badge>
-											</Link>
-										)}
-										{price && (
-											<Link to={getFilterUrl({ price: null })}>
-												<Badge pill bg='warning' className='text-dark'>
-													{price} <i className='fas fa-times-circle' />
-												</Badge>
-											</Link>
-										)}
-										{rating && (
-											<Link to={getFilterUrl({ rating: null })}>
-												<Badge pill bg='warning' className='text-dark'>
-													{ratings.find((r) => r.rating === rating).name} <i className='fas fa-times-circle' />
-												</Badge>
-											</Link>
-										)}
-									</div>
+								<Col md={8}>
+									<span className='text-nowrapt'>{(data?.countProducts > 0 ? data?.countProducts : 'No') + ' Results'}</span>
+									{query && (
+										<Link to={getFilterUrl({ query: null })}>
+											<Badge pill bg='warning' className='text-dark ms-2 my-1'>
+												{query} <i className='fas fa-times-circle' />
+											</Badge>
+										</Link>
+									)}
+									{category && (
+										<Link to={getFilterUrl({ category: null })}>
+											<Badge pill bg='warning' className='text-dark ms-2 my-1'>
+												{category} <i className='fas fa-times-circle' />
+											</Badge>
+										</Link>
+									)}
+									{price && (
+										<Link to={getFilterUrl({ price: null })}>
+											<Badge pill bg='warning' className='text-dark ms-2 my-1'>
+												{price} <i className='fas fa-times-circle' />
+											</Badge>
+										</Link>
+									)}
+									{rating && (
+										<Link to={getFilterUrl({ rating: null })}>
+											<Badge pill bg='warning' className='text-dark ms-2 my-1'>
+												{ratings.find((r) => r.rating === rating).name} <i className='fas fa-times-circle' />
+											</Badge>
+										</Link>
+									)}
 								</Col>
-								<Col className='text-end'>
+								<Col className='mt-3 mt-md-0 text-md-end'>
 									Sort by{' '}
 									<select
 										value={order}
