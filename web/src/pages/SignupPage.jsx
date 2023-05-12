@@ -54,7 +54,7 @@ function SignupPage() {
 					<Form.Control required onChange={(e) => setName(e.target.value)} />
 				</Form.Group>
 				<Form.Group className='mb-3' controlId='email'>
-					<Form.Label>Name</Form.Label>
+					<Form.Label>Email</Form.Label>
 					<Form.Control type='email' required onChange={(e) => setEmail(e.target.value)} />
 				</Form.Group>
 				<Form.Group className='mb-3' controlId='password'>

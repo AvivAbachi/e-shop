@@ -1,4 +1,4 @@
-import axios from './index';
+import axios from '.';
 
 async function getOrder(orderId, token) {
 	return await axios.get(`/api/v1/orders/${orderId}`, { headers: { authorization: `Bearer ${token}` } });

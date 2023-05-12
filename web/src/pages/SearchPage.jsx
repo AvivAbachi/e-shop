@@ -11,7 +11,7 @@ import MessageBox from '../components/MessageBox';
 import ProductCard from '../components/ProductCard';
 import Rating from '../components/Rating';
 import useRequest from '../hooks/useRequest';
-import { searchFilter, getError } from '../utils';
+import { getError, searchFilter } from '../utils';
 
 function SearchPage() {
 	const navigate = useNavigate();

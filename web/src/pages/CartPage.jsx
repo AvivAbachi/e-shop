@@ -26,6 +26,7 @@ function CartPage() {
 
 	function removeItemHandler(item) {
 		dispatch({ type: actions.REMOVE_FROM_CART, payload: item });
+		toast.error('Product remove form cart');
 	}
 
 	function checkoutHandler() {

@@ -48,12 +48,14 @@ export function Header() {
 						{userInfo ? (
 							<NavDropdown title={userInfo.name} id='basic-nav-dropdown'>
 								<LinkContainer to='/profile'>
-									<NavDropdown.Item>User Profile</NavDropdown.Item>
+									<NavDropdown.Item className='text-dark'>User Profile</NavDropdown.Item>
 								</LinkContainer>
 								<LinkContainer to='/order/all'>
-									<NavDropdown.Item>Order History</NavDropdown.Item>
+									<NavDropdown.Item className='text-dark'>Order History</NavDropdown.Item>
 								</LinkContainer>
-								<NavDropdown.Item onClick={signgoutHandelr}>Sign Out</NavDropdown.Item>
+								<NavDropdown.Item className='text-dark' onClick={signgoutHandelr}>
+									Sign Out
+								</NavDropdown.Item>
 							</NavDropdown>
 						) : (
 							<Link to='/signin' className='nav-link'>

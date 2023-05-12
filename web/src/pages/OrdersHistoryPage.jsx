@@ -3,17 +3,20 @@ import { Button, Card, Col, ListGroup, Row } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import orderApi from '../api/orderApi';
 import Loading from '../components/Loading';
 import MessageBox from '../components/MessageBox';
+import TextHighlight from '../components/TextHighlight';
 import useRequest from '../hooks/useRequest';
-import { Store } from '../Store';
-import { getError } from '../utils';
+import { actions, Store } from '../Store';
+import { getError, tryAddToCart } from '../utils';
 
 function OrdersHistoryPage() {
 	const {
 		state: { cart, userInfo },
+		dispatch,
 	} = useContext(Store);
 	const navigate = useNavigate();
 	const { onFail, onRequest, onSuccess, data: orders, error, loading } = useRequest();
@@ -32,7 +35,7 @@ function OrdersHistoryPage() {
 	};
 
 	useEffect(() => {
-		if (!userInfo) navigate('/signin?redirect=/orders/history');
+		if (!userInfo) navigate('/signin?redirect=/order/all');
 
 		const getOrders = async () => {
 			onRequest();
@@ -58,7 +61,7 @@ function OrdersHistoryPage() {
 				<Loading />
 			) : orders.length === 0 ? (
 				<MessageBox>
-					Your cart is empty. <Link to='/'>Go back to Home Page</Link>
+					Your orders history is empty. <Link to='/'>Go back to Home Page</Link>
 				</MessageBox>
 			) : (
 				orders.map((order) => (
@@ -71,7 +74,7 @@ function OrdersHistoryPage() {
 								</Col>
 								<Col md={6} lg='auto'>
 									<div className='fw-bold'>Total</div>
-									<div>{order.totalPrice.toFixed(2)}</div>
+									<div>${order.totalPrice.toFixed(2)}</div>
 								</Col>
 								<Col md={5} lg='auto'>
 									<div className='fw-bold'>Ship to</div>
@@ -94,6 +97,9 @@ function OrdersHistoryPage() {
 										</Col>
 										<Col>
 											<Link to={'/products/' + product.token}>{product.title}</Link>
+											<TextHighlight title='Quantity:' text={product.quantity} />
+											<TextHighlight title='Price:' text={`$${product.price}`} />
+											<TextHighlight title='Total:' text={product.quantity * product.price} />
 										</Col>
 										<Col md={3} className='d-flex flex-column gap-2'>
 											<Button onClick={() => addToCartHandler(product)}>Buy it again</Button>

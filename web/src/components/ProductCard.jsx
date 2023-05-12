@@ -13,7 +13,7 @@ function ProductCard({ product }) {
 	const addToCartHandler = async () => {
 		try {
 			const quantity = await tryAddToCart(state.cart, product);
-			toast.success('Product add to cart', { hideProgressBar: true, progress: 0.5 });
+			toast.success('Product add to cart');
 			dispatch({
 				type: actions.ADD_TO_CART,
 				payload: { ...product, quantity },
@@ -33,7 +33,7 @@ function ProductCard({ product }) {
 					<Card.Title>{product.title}</Card.Title>
 				</Link>
 				<Rating rating={product.rating} totalReviews={product.totalReviews} />
-				<Card.Text>{product.price}$</Card.Text>
+				<Card.Text>${product.price}</Card.Text>
 				{product.stock === 0 ? (
 					<Button variant='light' disabled>
 						Out of Stock

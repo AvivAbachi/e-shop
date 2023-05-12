@@ -4,6 +4,10 @@ export function generateToken(user) {
 	return jwt.sign({ _id: user._id, name: user.name, email: user.email }, process.env.JWT_SECRET, { expiresIn: '15d' });
 }
 
+export function generatePassword() {
+	return Math.random().toString(36).slice(-8);
+}
+
 export const isAdmin = (req, res, next) => {
 	if (req.user && req.user.isAdmin) {
 		next();
@@ -28,6 +32,3 @@ export const isAuth = (req, res, next) => {
 		res.status(401).send({ message: 'No Token' });
 	}
 };
-
-export const baseUrl = () =>
-	process.env.BASE_URL ? process.env.BASE_URL : process.env.NODE_ENV !== 'production' ? 'http://localhost:5000' : 'https://yourdomain.com';

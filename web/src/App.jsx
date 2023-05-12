@@ -14,7 +14,7 @@ function App() {
 					<Outlet />
 				</Container>
 			</main>
-			<ToastContainer position='bottom-center' limit={1} />
+			<ToastContainer position='bottom-center' autoClose={500} limit={2} hideProgressBar={true} theme='colored' />
 			<Footer />
 		</div>
 	);

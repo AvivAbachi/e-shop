@@ -1,5 +1,4 @@
-import { searchFilter } from '../utils';
-import axios from './index';
+import axios from '.';
 
 async function getProducts() {
 	return await axios.get('api/v1/products/');

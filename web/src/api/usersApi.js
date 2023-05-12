@@ -1,4 +1,4 @@
-import axios from './index';
+import axios from '.';
 
 async function signin(email, password) {
 	return await axios.post('/api/v1/users/signin', { email, password });

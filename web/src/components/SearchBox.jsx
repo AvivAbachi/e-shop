@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import useClickOutside from '@restart/ui/useClickOutside';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, Dropdown, Form, FormControl, InputGroup } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -35,6 +36,18 @@ function SearchBox() {
 		getData();
 	}, [query]);
 
+	const menuElement = useRef();
+
+	const handleClose = useCallback(() => {
+		setProducts([]);
+		document.removeEventListener('click', handleClose);
+	}, []);
+
+	useClickOutside(menuElement.current, handleClose, {
+		clickTrigger: document.addEventListener('click', handleClose),
+		disabled: products.length === 0,
+	});
+
 	return (
 		<Form onSubmit={submitHandler} className='d-flex mx-auto w-50 position-relative'>
 			<InputGroup>
@@ -51,7 +64,7 @@ function SearchBox() {
 					<i className='fas fa-search' />
 				</Button>
 			</InputGroup>
-			<Dropdown.Menu show={products.length} className='w-100 overflow-hidden'>
+			<Dropdown.Menu show={products.length !== 0} ref={menuElement} className='w-100 overflow-hidden'>
 				{products.map((p) => (
 					<Dropdown.Item key={p._id} as='span' onClick={() => setQuery('')}>
 						<Link to={`/products/${p.token}`} className='text-decoration-none text-dark'>

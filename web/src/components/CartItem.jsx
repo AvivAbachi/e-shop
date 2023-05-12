@@ -23,7 +23,7 @@ function CartItem({ title, token, image, quantity, price, stock, onIncrease, onD
 						</Button>
 					)}
 				</Col>
-				<Col md={3}>{price} $</Col>
+				<Col md={3}>${price}</Col>
 				{onRemove && (
 					<Col md={2}>
 						<Button variant='light' onClick={onRemove}>
