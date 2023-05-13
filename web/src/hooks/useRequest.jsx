@@ -17,7 +17,7 @@ const reducer = (state = initState, { type, payload }) => {
 		case actions.GET_REQUEST:
 			return { ...state, loading: true };
 		case actions.GET_SUCCESS:
-			return { ...state, data: payload, loading: false };
+			return { ...state, data: payload, loading: false, error: null };
 		case actions.GET_FAIL:
 			return { ...state, error: payload, loading: false };
 		default:

@@ -15,7 +15,7 @@ import { actions, Store } from '../Store';
 import { getError, round2 } from '../utils';
 
 function OrdersSummary() {
-	const { onFail, onRequest, onSuccess, data, error, loading } = useRequest();
+	const { loading, onRequest, onSuccess, onFail } = useRequest();
 	const { state, dispatch } = useContext(Store);
 	const { cart, userInfo } = state;
 	const navigate = useNavigate();

@@ -1,4 +1,5 @@
-import { createContext, useReducer } from 'react';
+import { createContext, useEffect, useReducer } from 'react';
+import usersApi from './api/usersApi';
 
 export const Store = createContext();
 
@@ -71,5 +72,15 @@ const reducer = (state = initialState, { type, payload }) => {
 
 export function StoreProvider({ children }) {
 	const [state, dispatch] = useReducer(reducer, initialState);
+
+	useEffect(() => {
+		const getUser = async () => {
+			if (initialState.userInfo.token !== null) {
+				const { data } = await usersApi.access(initialState.userInfo.token);
+				dispatch({ type: actions.USER_SIGNIN, payload: data });
+			}
+		};
+		getUser();
+	}, []);
 	return <Store.Provider value={{ state, dispatch }}>{children}</Store.Provider>;
 }

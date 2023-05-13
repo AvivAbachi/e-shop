@@ -15,7 +15,7 @@ function ProductPage() {
 	const navigate = useNavigate();
 	const { token } = useParams();
 	const { state, dispatch } = useContext(Store);
-	const { onFail, onSuccess, onRequest, data: product, error, loading } = useRequest();
+	const { data: product, error, loading, onRequest, onSuccess, onFail } = useRequest();
 
 	const addToCartHandler = async () => {
 		try {

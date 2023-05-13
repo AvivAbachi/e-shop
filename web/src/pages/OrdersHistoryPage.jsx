@@ -19,7 +19,7 @@ function OrdersHistoryPage() {
 		dispatch,
 	} = useContext(Store);
 	const navigate = useNavigate();
-	const { onFail, onRequest, onSuccess, data: orders, error, loading } = useRequest();
+	const { data: orders, error, loading, onRequest, onSuccess, onFail } = useRequest();
 
 	const addToCartHandler = async (product) => {
 		try {

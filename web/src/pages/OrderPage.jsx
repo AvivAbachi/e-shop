@@ -19,7 +19,7 @@ function OrderPage() {
 	} = useContext(Store);
 	const { orderId } = useParams();
 	const navigate = useNavigate();
-	const { onFail, onRequest, onSuccess, data: order, error, loading } = useRequest();
+	const { data: order, error, loading, onRequest, onSuccess, onFail } = useRequest();
 
 	useEffect(() => {
 		if (!userInfo) navigate('/signin?redirect=/order/' + orderId);

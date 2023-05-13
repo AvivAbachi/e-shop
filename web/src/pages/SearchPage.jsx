@@ -16,7 +16,8 @@ import { getError, searchFilter } from '../utils';
 function SearchPage() {
 	const navigate = useNavigate();
 	const { search } = useLocation();
-	const { loading, data, error, onFail, onRequest, onSuccess } = useRequest();
+	const { data: results, error, loading, onRequest, onSuccess, onFail } = useRequest();
+
 	const [categories, setCategories] = useState([]);
 
 	const searchParams = new URLSearchParams(search);
@@ -122,7 +123,7 @@ function SearchPage() {
 						<>
 							<Row className='justify-content-between mb-3'>
 								<Col md={8}>
-									<span className='text-nowrapt'>{(data?.countProducts > 0 ? data?.countProducts : 'No') + ' Results'}</span>
+									<span className='text-nowrapt'>{(results?.countProducts > 0 ? results?.countProducts : 'No') + ' Results'}</span>
 									{query && (
 										<Link to={getFilterUrl({ query: null })}>
 											<Badge pill bg='warning' className='text-dark ms-2 my-1'>
@@ -167,16 +168,16 @@ function SearchPage() {
 									</select>
 								</Col>
 							</Row>
-							{data?.products?.length === 0 && <MessageBox>No Product Found</MessageBox>}
+							{results?.products?.length === 0 && <MessageBox>No Product Found</MessageBox>}
 							<Row>
-								{data?.products?.map((product) => (
+								{results?.products?.map((product) => (
 									<Col sm={6} lg={4} className='mb-3' key={product._id}>
 										<ProductCard product={product} />
 									</Col>
 								))}
 							</Row>
 							<div>
-								{[...Array(data?.pages).keys()].map((x) => (
+								{[...Array(results?.pages).keys()].map((x) => (
 									<LinkContainer
 										key={x + 1}
 										className='mx-1'

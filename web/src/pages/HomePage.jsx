@@ -9,7 +9,7 @@ import ProductCard from '../components/ProductCard';
 import useRequest from '../hooks/useRequest';
 
 function HomePage() {
-	const { onFail, onSuccess, onRequest, data: products, error, loading } = useRequest();
+	const { data: products, error, loading, onRequest, onSuccess, onFail } = useRequest();
 
 	useEffect(() => {
 		const getData = async () => {
